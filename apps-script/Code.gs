@@ -2,7 +2,7 @@
 // 1) Edit the two lines below.  2) Store the GitHub token as script property GITHUB_TOKEN.
 // 3) Deploy > New deployment > Web app (Execute as: Me, Who has access: Anyone) and copy its link into site.config.json.
 //    After every change of this file: Deploy > Manage deployments > pencil > Version: New version > Deploy.
-const GITHUB_OWNER = "YOUR-GITHUB-USERNAME";
+const GITHUB_OWNER = "memoria-judaica";
 const GITHUB_REPO = "memoria-judaica";
 const WORKFLOW_FILE = "deploy.yml";
 const CONTACT_TO = "memoriajudaica@gmail.com"; // the website contact form delivers here
@@ -129,14 +129,14 @@ function doPost(e) {
     const d = JSON.parse(e.postData.contents);
     if (d.hp) return ok_();                                   // hidden field filled in = robot
     if (!d.t || Date.now() - Number(d.t) < 3000) return ok_(); // sent faster than a human can type
-    const name = String(d.name || "").trim().slice(0, 200), email = String(d.email || "").trim().slice(0, 200);
+    const name = String(d.name || "").trim().slice(0, 200) /* optional */, email = String(d.email || "").trim().slice(0, 200);
     const subject = String(d.subject || "").trim().slice(0, 200), message = String(d.message || "").trim().slice(0, 5000);
-    if (!name || !subject || !message || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return ok_();
+    if (!subject || !message || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return ok_();
     const cache = CacheService.getScriptCache(), key = "mail" + Math.floor(Date.now() / 3600000), n = Number(cache.get(key) || 0);
     if (n >= 20) return ok_();                                // at most 20 messages per hour
     cache.put(key, String(n + 1), 3600);
-    MailApp.sendEmail({ to: CONTACT_TO, replyTo: email, name: name + " (website)", subject: "[Memoria Judaica website] " + subject,
-      body: "From: " + name + " <" + email + ">\n\n" + message + "\n\n--\nSent through the contact form of the Memoria Judaica website." });
+    MailApp.sendEmail({ to: CONTACT_TO, replyTo: email, name: (name || "Website visitor") + " (website)", subject: "[Memoria Judaica website] " + subject,
+      body: "From: " + (name || "(no name given)") + " <" + email + ">\n\n" + message + "\n\n--\nSent through the contact form of the Memoria Judaica website." });
   } catch (err) { /* ignore: the visitor sees the normal thank-you message */ }
   return ok_();
 }

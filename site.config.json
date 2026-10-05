@@ -1,5 +1,5 @@
 {
   "_help": "contentUrl: the web address of the Google Sheet script (see the admin guide, Step 6). Leave empty to use the built-in content.",
-  "contentUrl": "",
+  "contentUrl": "https://script.google.com/macros/s/AKfycby-fY6YWxCTy5lbZW_DeG29_8FEgQIO4zIPUojRIsZD0IUXjU9sDAOSdzKnsuH0Aikp/exec",
   "hideAfterDays": 14
 }
