@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { font-size: clamp(15px, 9px + .7vw, 20px); scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { margin: 0; background: #f6f1e7; -webkit-text-size-adjust: 100%; }
+h1, h2, h3, p, a, li { overflow-wrap: break-word; }
+@keyframes cgrow { from { width: 0 } to { width: 100% } }

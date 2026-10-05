@@ -1,0 +1,5 @@
+{
+  "_help": "contentUrl: the web address of the Google Sheet script (see the admin guide, Step 6). Leave empty to use the built-in content.",
+  "contentUrl": "",
+  "hideAfterDays": 14
+}

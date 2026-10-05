@@ -1,0 +1,30 @@
+# OPTIONAL - use this instead of deploy.yml when the code repository must stay PRIVATE (free) and the website is hosted on Cloudflare Pages.
+# NOT TESTED by the author of the package. Read DOMAIN-AND-EMAIL-GUIDE.pdf, Step 7, before using it.
+# How: replace the content of .github/workflows/deploy.yml with this file (keep the file name deploy.yml, so the Publish button in the Google Sheet still works).
+# Needs: a Cloudflare Pages project named memoria-judaica (Direct Upload) and two GitHub secrets: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID.
+name: Publish website
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: publish
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=memoria-judaica --branch=main

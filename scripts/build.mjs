@@ -1,0 +1,10 @@
+import { build } from "esbuild";
+import fs from "node:fs";
+import { execSync } from "node:child_process";
+fs.rmSync("dist", { recursive: true, force: true });
+fs.mkdirSync("dist", { recursive: true });
+await build({ entryPoints: ["src/app.jsx"], bundle: true, minify: true, outfile: "dist/app.js", jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment", define: { "process.env.NODE_ENV": '"production"' }, charset: "utf8", target: ["es2019"], loader: { ".json": "json" } });
+execSync("npx tailwindcss -c tailwind.config.js -i src/styles.css -o dist/styles.css --minify", { stdio: "inherit" });
+fs.copyFileSync("index.html", "dist/index.html");
+fs.cpSync("public", "dist", { recursive: true });
+console.log("Build finished: dist/");
